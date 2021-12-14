@@ -33,6 +33,7 @@ export default class RockstarClient extends BaseClient {
 			},
 		);
 		this.listenerHandler.attach("client", this);
+		this.listenerHandler.attach("commandHandler", this.commandHandler);
 		this.commandHandler.loadAll();
 		this.listenerHandler.loadAll();
 	}

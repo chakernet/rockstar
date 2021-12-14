@@ -12,6 +12,15 @@ export interface CommandHandlerOptions extends HandlerOptions {
 	prefix: string | prefixFunc;
 }
 
+declare module "eris" {
+	interface Message {
+		parsed?: {
+			alias?: string;
+			prefix?: string;
+		};
+	}
+}
+
 export default class CommandHandler extends Handler {
 	public owner: string | string[];
 	public readonly prefix: string | prefixFunc;
@@ -78,11 +87,24 @@ export default class CommandHandler extends Handler {
 		return parsedArgs;
 	}
 
+	public findCommandByAlias(alias: string): Command | null {
+		return this.modules.find((v: Module) => {
+			const vc = v as Command;
+			if (vc.aliases.includes(alias.toLowerCase())) {
+				return true;
+			}
+
+			return false;
+		}) as Command;
+	}
+
 	public async handle(message: Message) {
 		// check if message starts with prefix
 		const prefix = await this.getPrefix(message);
 		if (!message.content.toLowerCase().startsWith(prefix.toLowerCase()))
 			return;
+
+		message.parsed = { prefix };
 
 		const parsed = this.runPreParser(message.content);
 
@@ -91,15 +113,10 @@ export default class CommandHandler extends Handler {
 		if (!alias) {
 			return;
 		}
-		const command = this.modules.find((v: Module) => {
-			const vc = v as Command;
-			if (vc.aliases.includes(alias.toLowerCase())) {
-				return true;
-			}
-
-			return false;
-		}) as Command;
+		message.parsed.alias = alias;
+		const command = this.findCommandByAlias(alias);
 		if (!command) {
+			this.emit(Constants.commandHandler.events.invalidCommand, message);
 			return;
 		}
 		const args = await this.parseArgs(command, parsed);

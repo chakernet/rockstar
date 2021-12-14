@@ -4,23 +4,21 @@ import { Message } from "eris";
 
 export default class GatewayEventListener extends Listener {
 	constructor() {
-		super("gatewayEvent", {
+		super("amqpMessage", {
 			emitter: "client",
-			event: "gatewayEvent",
+			event: "amqpMessage",
 		});
 	}
 
 	exec(channel: AmqpChannel, msg: AmqpMessage) {
-		console.log(msg?.content.toString());
 		const parsed = JSON.parse(msg!.content.toString());
 
 		switch (parsed.t) {
 			case "MESSAGE_CREATE":
-				if (parsed.d.author.bot) {
-					return;
-				}
-				const message = new Message(parsed.d, this.client);
-				this.client.commandHandler.handle(message);
+				this.client.emit(
+					"messageCreate",
+					new Message(parsed.d, this.client),
+				);
 				break;
 		}
 

@@ -19,9 +19,11 @@ __metadata:
     "@discordjs/collection": ^0.3.2
     "@rockstar/handler": ^1.0.0
     "@types/amqplib": ^0.8.2
+    "@types/fast-levenshtein": ^0.0.2
     amqplib: ^0.8.0
     dotenv: ^10.0.0
     eris: ^0.16.1
+    fast-levenshtein: ^3.0.0
     shlex: ^2.1.0
   languageName: unknown
   linkType: soft
@@ -50,6 +52,13 @@ __metadata:
   version: 3.5.36
   resolution: "@types/bluebird@npm:3.5.36"
   checksum: efe7484e1f6c3443c083f052efb7688b461a9f43899b1891c10b1faf92e4932d686265d10c3e02b8c8fe0c8c371774e6a55ff6eec5e79525390a1ddeee7eb41b
+  languageName: node
+  linkType: hard
+
+"@types/fast-levenshtein@npm:^0.0.2":
+  version: 0.0.2
+  resolution: "@types/fast-levenshtein@npm:0.0.2"
+  checksum: fb886b85c3a314948a86ad164b91217454993c88f658a529013cd0084e24996cd58637baf66e818ac6e78819e831e06a8d38d6f5f81ab36d1d4cf4c3da3c5e5b
   languageName: node
   linkType: hard
 
@@ -135,6 +144,22 @@ __metadata:
     tweetnacl:
       optional: true
   checksum: 86fe74000178ae858453371bb5a019ad525b2e84fa47924c016290fd4006d222696919145c450619e1913349592e1e610e28700eab8208001c4600dc0dbdfe35
+  languageName: node
+  linkType: hard
+
+"fast-levenshtein@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "fast-levenshtein@npm:3.0.0"
+  dependencies:
+    fastest-levenshtein: ^1.0.7
+  checksum: 02732ba6c656797ca7e987c25f3e53718c8fcc39a4bfab46def78eef7a8729eb629632d4a7eca4c27a33e10deabffa9984839557e18a96e91ecf7ccaeedb9890
+  languageName: node
+  linkType: hard
+
+"fastest-levenshtein@npm:^1.0.7":
+  version: 1.0.12
+  resolution: "fastest-levenshtein@npm:1.0.12"
+  checksum: e1a013698dd1d302c7a78150130c7d50bb678c2c2f8839842a796d66cc7cdf50ea6b3d7ca930b0c8e7e8c2cd84fea8ab831023b382f7aab6922c318c1451beab
   languageName: node
   linkType: hard
 

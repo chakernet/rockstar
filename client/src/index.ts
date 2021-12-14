@@ -11,7 +11,7 @@ async function start() {
 	const channel = await conn.createChannel();
 	channel.assertQueue("events");
 	channel.consume("events", (msg: amqplib.ConsumeMessage | null) => {
-		bot.emit("gatewayEvent", channel, msg);
+		bot.emit("amqpMessage", channel, msg);
 	});
 }
 
