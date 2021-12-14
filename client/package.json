@@ -1,0 +1,23 @@
+{
+	"name": "@rockstar/client",
+	"private": true,
+	"version": "1.0.0",
+	"main": "dist/index.js",
+	"scripts": {
+		"start": "node .",
+		"build": "tsc"
+	},
+	"dependencies": {
+		"@discordjs/collection": "^0.3.2",
+		"amqplib": "^0.8.0",
+		"dotenv": "^10.0.0",
+		"eris": "^0.16.1",
+		"shlex": "^2.1.0"
+	},
+	"engines": {
+		"node": ">=16.6.0"
+	},
+	"devDependencies": {
+		"@types/amqplib": "^0.8.2"
+	}
+}
