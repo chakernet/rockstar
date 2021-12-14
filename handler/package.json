@@ -1,0 +1,12 @@
+{
+	"name": "@rockstar/handler",
+	"version": "1.0.0",
+	"main": "./dist/index.js",
+	"packageManager": "yarn@3.0.2",
+	"peerDependencies": {
+		"eris": "^0.16"
+	},
+	"dependencies": {
+		"@discordjs/collection": "^0.3.2"
+	}
+}

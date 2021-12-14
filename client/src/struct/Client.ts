@@ -1,9 +1,14 @@
-import { Client as ErisClient, ClientOptions as ErisClientOptions } from "eris";
+import { ClientOptions as ErisClientOptions } from "eris";
 import path from "path";
-import CommandHandler from "./handler/command/CommandHandler";
-import ListenerHandler from "./handler/listener/ListenerHandler";
+import {
+	CommandHandler,
+	ListenerHandler,
+	Client as BaseClient,
+} from "@rockstar/handler";
+import Listener from "./Listener";
+import Command from "./Command";
 
-export default class RockstarClient extends ErisClient {
+export default class RockstarClient extends BaseClient {
 	public commandHandler: CommandHandler;
 	public listenerHandler: ListenerHandler;
 
@@ -16,6 +21,7 @@ export default class RockstarClient extends ErisClient {
 				client: this,
 				extensions: [".ts", ".js"],
 				prefix: ".",
+				classToHandle: Command,
 			},
 		);
 		this.listenerHandler = new ListenerHandler(
@@ -23,6 +29,7 @@ export default class RockstarClient extends ErisClient {
 			{
 				client: this,
 				extensions: [".ts", ".js"],
+				classToHandle: Listener,
 			},
 		);
 		this.listenerHandler.attach("client", this);

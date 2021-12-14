@@ -1,4 +1,4 @@
-import Listener from "../struct/handler/listener/Listener";
+import Listener from "../struct/Listener";
 import type { Message as AmqpMessage, Channel as AmqpChannel } from "amqplib";
 import { Message } from "eris";
 

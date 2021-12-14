@@ -6,6 +6,19 @@
 		"strict": true,
 		"esModuleInterop": true,
 		"skipLibCheck": true,
-		"forceConsistentCasingInFileNames": true
-	}
+		"forceConsistentCasingInFileNames": true,
+		"paths": {
+			"@rockstar/handler": ["./handler"]
+		}
+	},
+	"references": [
+		{
+			"path": "client"
+		},
+		{
+			"path": "handler"
+		}
+	],
+	"include": ["src/**/*"],
+	"exclude": ["node_modules", "dist"]
 }

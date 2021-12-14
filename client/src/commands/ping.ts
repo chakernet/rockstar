@@ -1,5 +1,5 @@
 import { Message } from "eris";
-import Command from "../struct/handler/command/Command";
+import Command from "../struct/Command";
 
 export default class PingCommand extends Command {
 	constructor() {

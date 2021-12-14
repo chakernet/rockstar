@@ -1,7 +1,7 @@
 import Handler, { HandlerOptions } from "../Handler";
 import Command from "./Command";
 import Module from "../Module";
-import Constants from "../constants";
+import Constants from "../../constants";
 import shlex from "shlex";
 import { Message, TextChannel } from "eris";
 

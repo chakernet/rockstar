@@ -2,8 +2,10 @@
 	"name": "rockstar",
 	"private": true,
 	"version": "1.0.0",
+	"packageManager": "yarn@3.0.2",
 	"workspaces": [
-		"client"
+		"client",
+		"handler"
 	],
 	"devDependencies": {
 		"@types/node": "^16.11.12",

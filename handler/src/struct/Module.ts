@@ -1,5 +1,5 @@
 import Handler from "./Handler";
-import Client from "../Client";
+import Client from "./Client";
 import Collection from "@discordjs/collection";
 
 export interface ModuleOptions {
