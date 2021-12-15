@@ -1,6 +1,11 @@
 import Listener from "../struct/Listener";
 import type { Message as AmqpMessage, Channel as AmqpChannel } from "amqplib";
-import { Message } from "eris";
+import {
+	ComponentInteraction,
+	Interaction,
+	Message,
+	UnknownInteraction,
+} from "eris";
 
 export default class GatewayEventListener extends Listener {
 	constructor() {
@@ -18,6 +23,13 @@ export default class GatewayEventListener extends Listener {
 				this.client.emit(
 					"messageCreate",
 					new Message(parsed.d, this.client),
+				);
+				break;
+			case "INTERACTION_CREATE":
+				this.client.emit(
+					"interactionCreate",
+					// @ts-expect-error private method
+					Interaction.from(parsed.d, this.client),
 				);
 				break;
 		}

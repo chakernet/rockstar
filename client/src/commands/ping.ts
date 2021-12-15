@@ -1,4 +1,4 @@
-import { Message } from "eris";
+import { Message, UnknownInteraction } from "eris";
 import Command from "../struct/Command";
 import Embed from "../struct/Embed";
 

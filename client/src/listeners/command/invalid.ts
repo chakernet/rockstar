@@ -1,8 +1,9 @@
 import Listener from "../../struct/Listener";
-import { Message } from "eris";
+import { Constants, Message, UnknownInteraction } from "eris";
 import lev from "fast-levenshtein";
 import Command from "../../struct/Command";
 import Embed, { BaseEmbed } from "../../struct/Embed";
+import { createInteractionCollector } from "../../util";
 
 export default class InvalidCommandListener extends Listener {
 	constructor() {
@@ -13,7 +14,7 @@ export default class InvalidCommandListener extends Listener {
 		});
 	}
 
-	exec(msg: Message) {
+	async exec(msg: Message) {
 		console.log(msg.parsed?.alias);
 
 		const distances: { dist: number; alias: string; cmd: Command }[] = [];
@@ -34,16 +35,54 @@ export default class InvalidCommandListener extends Listener {
 		if (distances[0].dist > 0 && distances[0].dist <= 2) {
 			const command = distances[0].cmd;
 
-			this.client.createMessage(msg.channel.id, {
+			const newMessage = await this.client.createMessage(msg.channel.id, {
 				embed: new BaseEmbed({
 					title: `**${msg.parsed?.alias}** is not a command. Did you mean **${distances[0].alias}**?`,
 				}),
+				components: [
+					{
+						type: Constants.ComponentTypes.ACTION_ROW,
+						components: [
+							{
+								type: Constants.ComponentTypes.BUTTON,
+								style: Constants.ButtonStyles.SUCCESS,
+								custom_id: "true",
+								label: "Yes",
+								disabled: false,
+							},
+						],
+					},
+				],
 				messageReference: {
 					messageID: msg.id,
 					channelID: msg.channel.id,
 					guildID: msg.guildID,
 				},
 			});
+
+			createInteractionCollector(
+				this.client,
+				undefined,
+				(interaction: UnknownInteraction) =>
+					interaction.guildID == msg.guildID &&
+					interaction.channel!.id == msg.channel.id &&
+					interaction.message!.id == newMessage.id &&
+					interaction.type ==
+						Constants.InteractionTypes.MESSAGE_COMPONENT,
+				async (interaction: UnknownInteraction) => {
+					if ((<any>interaction.data)?.custom_id == "true") {
+						await newMessage.delete();
+
+						let newArgs = msg.content.split(" ");
+						newArgs[0] = newArgs[0].replace(
+							msg.parsed!.alias!,
+							distances[0].alias,
+						);
+						msg.content = newArgs.join(" ");
+						this.client.commandHandler.handle(msg);
+					}
+				},
+			);
 		}
 	}
 }

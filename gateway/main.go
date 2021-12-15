@@ -58,6 +58,10 @@ func setupEvents(channel *amqp.Channel, events <-chan ws.Op) {
     if err != nil {
         log.Fatalf("error declaring queue: ", err)
     }
+    err = channel.ExchangeDeclare("events_fanout", "fanout", true, false, false, false, nil)
+    if err != nil {
+        log.Fatalf("error declaring exchange: ", err)
+    }
 
     go func() {
         for event := range events {
@@ -70,10 +74,20 @@ func setupEvents(channel *amqp.Channel, events <-chan ws.Op) {
             if err != nil {
                 log.Printf("error marshalling event: ", err)
             }
-            err = channel.Publish("", eQueue.Name, false, false, amqp.Publishing{
-                ContentType: "application/json",
-                Body:        bytes,
-            })
+
+            // We want all clients to recieve interaction events
+            if event.Type == "INTERACTION_CREATE" {
+                err = channel.Publish("events_fanout", "", false, false, amqp.Publishing{
+                    ContentType: "application/json",
+                    Body:        bytes,
+                })
+            } else {
+                err = channel.Publish("", eQueue.Name, false, false, amqp.Publishing{
+                    ContentType: "application/json",
+                    Body:        bytes,
+                })
+            }
+
             if err != nil {
                 log.Printf("error publishing event: ", err)
             }
