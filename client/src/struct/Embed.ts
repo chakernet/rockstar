@@ -53,11 +53,6 @@ export class BaseEmbed implements DefaultEmbed {
 
 export default class Embed extends BaseEmbed {
 	constructor(options: EmbedOptions, user: User) {
-		options.footer ??= {
-			text: `${user.username}#${user.discriminator}`,
-			icon_url: user.avatarURL,
-		};
-
 		super(options);
 	}
 }

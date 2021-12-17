@@ -7,10 +7,12 @@ import {
 } from "@rockstar/handler";
 import Listener from "./Listener";
 import Command from "./Command";
+import CacheManager from "./CacheManager";
 
 export default class RockstarClient extends BaseClient {
 	public commandHandler: CommandHandler;
 	public listenerHandler: ListenerHandler;
+	public cache: CacheManager;
 
 	constructor(token: string, options?: ErisClientOptions) {
 		super(token, options);
@@ -36,5 +38,10 @@ export default class RockstarClient extends BaseClient {
 		this.listenerHandler.attach("commandHandler", this.commandHandler);
 		this.commandHandler.loadAll();
 		this.listenerHandler.loadAll();
+
+		this.cache = new CacheManager(
+			parseInt(process.env.REDIS_PORT!),
+			process.env.REDIS_HOST!,
+		);
 	}
 }

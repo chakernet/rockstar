@@ -20,6 +20,9 @@ export default class GatewayEventListener extends Listener {
 
 		switch (parsed.t) {
 			case "MESSAGE_CREATE":
+				this.client.cache.setMessage(
+					new Message(parsed.d, this.client),
+				);
 				this.client.emit(
 					"messageCreate",
 					new Message(parsed.d, this.client),
