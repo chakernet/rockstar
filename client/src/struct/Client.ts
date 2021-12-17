@@ -42,6 +42,7 @@ export default class RockstarClient extends BaseClient {
 		this.cache = new CacheManager(
 			parseInt(process.env.REDIS_PORT!),
 			process.env.REDIS_HOST!,
+			this,
 		);
 	}
 }

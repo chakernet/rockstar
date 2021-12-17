@@ -15,18 +15,22 @@ export default class GatewayEventListener extends Listener {
 		});
 	}
 
-	exec(channel: AmqpChannel, msg: AmqpMessage) {
+	async exec(channel: AmqpChannel, msg: AmqpMessage) {
 		const parsed = JSON.parse(msg!.content.toString());
 
 		switch (parsed.t) {
 			case "MESSAGE_CREATE":
-				this.client.cache.setMessage(
-					new Message(parsed.d, this.client),
+				const createMessage = new Message(parsed.d, this.client);
+				this.client.cache.setMessage(parsed.d);
+				this.client.emit("messageCreate", createMessage);
+				break;
+			case "MESSAGE_UPDATE":
+				const newMessage = new Message(parsed.d, this.client);
+				const oldMessage = await this.client.cache.getMessage(
+					newMessage.id,
 				);
-				this.client.emit(
-					"messageCreate",
-					new Message(parsed.d, this.client),
-				);
+				this.client.cache.setMessage(parsed.d);
+				this.client.emit("messageUpdate", oldMessage, newMessage);
 				break;
 			case "INTERACTION_CREATE":
 				this.client.emit(
