@@ -1,4 +1,4 @@
-import { ClientOptions as ErisClientOptions } from "eris";
+import { AnyChannel, ClientOptions as ErisClientOptions } from "eris";
 import path from "path";
 import {
 	CommandHandler,
@@ -8,14 +8,19 @@ import {
 import Listener from "./Listener";
 import Command from "./Command";
 import CacheManager from "./CacheManager";
+const Emojis = require("../../../data/emojis.json");
 
 export default class RockstarClient extends BaseClient {
 	public commandHandler: CommandHandler;
 	public listenerHandler: ListenerHandler;
 	public cache: CacheManager;
+	public emojis: any;
 
 	constructor(token: string, options?: ErisClientOptions) {
 		super(token, options);
+
+		this.emojis = Emojis;
+		this.owner = ["739969527957422202"];
 
 		this.commandHandler = new CommandHandler(
 			path.resolve(__dirname, "../commands"),

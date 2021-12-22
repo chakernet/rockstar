@@ -15,8 +15,6 @@ export default class InvalidCommandListener extends Listener {
 	}
 
 	async exec(msg: Message) {
-		console.log(msg.parsed?.alias);
-
 		const distances: { dist: number; alias: string; cmd: Command }[] = [];
 		this.client.commandHandler.modules.forEach((cmd) => {
 			(<Command>cmd).aliases.forEach((a) => {
@@ -45,9 +43,16 @@ export default class InvalidCommandListener extends Listener {
 						components: [
 							{
 								type: Constants.ComponentTypes.BUTTON,
-								style: Constants.ButtonStyles.SUCCESS,
+								style: Constants.ButtonStyles.SECONDARY,
 								custom_id: "true",
-								label: "Yes",
+								label: this.client.emojis.check,
+								disabled: false,
+							},
+							{
+								type: Constants.ComponentTypes.BUTTON,
+								style: Constants.ButtonStyles.SECONDARY,
+								custom_id: "false",
+								label: this.client.emojis.x,
 								disabled: false,
 							},
 						],

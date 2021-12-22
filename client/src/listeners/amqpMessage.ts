@@ -21,7 +21,7 @@ export default class GatewayEventListener extends Listener {
 		switch (parsed.t) {
 			case "MESSAGE_CREATE":
 				const createMessage = new Message(parsed.d, this.client);
-				this.client.cache.setMessage(parsed.d);
+				this.client.cache.setMessage(createMessage);
 				this.client.emit("messageCreate", createMessage);
 				break;
 			case "MESSAGE_UPDATE":
@@ -31,6 +31,12 @@ export default class GatewayEventListener extends Listener {
 				);
 				this.client.cache.setMessage(parsed.d);
 				this.client.emit("messageUpdate", oldMessage, newMessage);
+				break;
+			case "MESSAGE_DELETE":
+				const deletedMessage = await this.client.cache.getMessage(
+					parsed.id,
+				);
+				this.client.emit("messageDelete", deletedMessage);
 				break;
 			case "INTERACTION_CREATE":
 				this.client.emit(

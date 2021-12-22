@@ -5,6 +5,7 @@ export type ArgType = "string" | "number";
 export interface Arg {
 	id: string;
 	type: ArgType;
+	required?: boolean;
 }
 
 export interface CommandOptions extends ModuleOptions {

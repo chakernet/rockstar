@@ -8,6 +8,7 @@ export = {
 			owner: "ownerOnly",
 			missingPermissions: "missingPermissions",
 			nsfw: "nsfw",
+			missingArgument: "missingArgument",
 		},
 	},
 };

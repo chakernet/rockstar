@@ -17,6 +17,7 @@ declare module "eris" {
 		parsed?: {
 			alias?: string;
 			prefix?: string;
+			content?: string;
 		};
 	}
 }
@@ -60,16 +61,28 @@ export default class CommandHandler extends Handler {
 	}
 
 	private async parseArgs(
+		message: Message,
 		command: Command,
 		args: string[],
 	): Promise<unknown> {
 		// remove the command alias from the array
 		args.shift();
+		message.parsed!.content = args.join(" ");
 
 		let parsedArgs = {};
 
-		for (let i = 0; i < args.length; i++) {
+		for (let i = 0; i < command.args.length; i++) {
 			const commandArg = command.args[i];
+			if (commandArg.required && !args[i]) {
+				this.emit(
+					Constants.commandHandler.events.missingArgument,
+					message,
+					command,
+					commandArg.id,
+				);
+				return;
+			}
+
 			switch (commandArg.type) {
 				case "string":
 					Object.defineProperty(parsedArgs, commandArg.id, {
@@ -119,9 +132,11 @@ export default class CommandHandler extends Handler {
 			this.emit(Constants.commandHandler.events.invalidCommand, message);
 			return;
 		}
-		const args = await this.parseArgs(command, parsed);
 
-		//if (!(await this.runInhibitors(message, command))) return;
+		if (!(await this.runInhibitors(message, command))) return;
+
+		const args = await this.parseArgs(message, command, parsed);
+		if (!args) return; // a missing argument was already handled
 
 		this.emit(
 			Constants.commandHandler.events.commandStarted,
@@ -145,5 +160,22 @@ export default class CommandHandler extends Handler {
 			message,
 			command,
 		);
+	}
+
+	public async runInhibitors(
+		message: Message,
+		command: Command,
+	): Promise<boolean> {
+		if (command.ownerOnly) {
+			if (!this.client.isOwner(message.author.id)) {
+				this.emit(
+					Constants.commandHandler.events.owner,
+					message,
+					command,
+				);
+				return false;
+			}
+		}
+		return true;
 	}
 }

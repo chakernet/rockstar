@@ -12,7 +12,6 @@ export default class MessageCreateListener extends Listener {
 
 	exec(msg: Message) {
 		if (msg.author.bot) return;
-		console.log(msg.content);
 		this.client.commandHandler.handle(msg);
 	}
 }
