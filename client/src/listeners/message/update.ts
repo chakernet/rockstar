@@ -11,10 +11,9 @@ export default class MessageUpdateListener extends Listener {
 	}
 
 	exec(oldMsg: Message, newMsg: Message) {
-		if (oldMsg.author.bot) return;
-
+		if (newMsg.author.bot) return;
 		this.client.createMessage(
-			oldMsg.channel.id,
+			newMsg.channel.id,
 			[
 				"***MESSAGE EDITED***",
 				"**Old:**",

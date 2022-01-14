@@ -59,7 +59,7 @@ export default class CacheManager {
 	}
 
 	public async getMessage(id: string): Promise<Message> {
-		return new Message(await this.getObject(`messages:${id}`), this.client);
+		return this.getObject(`messages:${id}`) as Promise<Message>;
 	}
 
 	public setChannel(channel: Channel) {

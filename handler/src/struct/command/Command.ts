@@ -1,7 +1,7 @@
 import Module, { ModuleOptions } from "../Module";
 import { Message } from "eris";
 
-export type ArgType = "string" | "number";
+export type ArgType = "string" | "number" | "user";
 export interface Arg {
 	id: string;
 	type: ArgType;

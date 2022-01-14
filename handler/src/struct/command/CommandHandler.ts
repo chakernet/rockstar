@@ -94,6 +94,35 @@ export default class CommandHandler extends Handler {
 						value: parseInt(args[i]),
 					});
 					break;
+				case "user":
+					const searchedUser = new RegExp(
+						/^<@(?!&)(?:!|)([0-9]+)>$/gm,
+					).exec(args[i]);
+					if (!searchedUser) {
+						this.emit(
+							Constants.commandHandler.events.invalidArgument,
+							message,
+							command,
+							commandArg.id,
+						);
+						return;
+					}
+
+					const user = this.client.users.get(searchedUser[1]);
+					if (!user) {
+						this.emit(
+							Constants.commandHandler.events.invalidArgument,
+							message,
+							command,
+							commandArg.id,
+						);
+						return;
+					}
+					Object.defineProperty(parsedArgs, commandArg.id, {
+						value: user,
+					});
+
+					break;
 			}
 		}
 

@@ -9,6 +9,7 @@ export = {
 			missingPermissions: "missingPermissions",
 			nsfw: "nsfw",
 			missingArgument: "missingArgument",
+			invalidArgument: "invalidArgument",
 		},
 	},
 };

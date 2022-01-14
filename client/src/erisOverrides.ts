@@ -8,6 +8,7 @@ Message.prototype.toJSON = function (props: string[] = []) {
 	return Base.prototype.toJSON.call(this, [
 		"attachments",
 		"author",
+		"channel",
 		"content",
 		"editedTimestamp",
 		"embeds",
