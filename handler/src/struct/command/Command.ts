@@ -6,6 +6,7 @@ export interface Arg {
 	id: string;
 	type: ArgType;
 	required?: boolean;
+	default?: any | ((msg: Message) => any);
 }
 
 export interface CommandOptions extends ModuleOptions {

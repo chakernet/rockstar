@@ -2,10 +2,10 @@ import { Message, User } from "eris";
 import Command from "../../struct/Command";
 import Embed from "../../struct/Embed";
 
-export default class AvatarCommand extends Command {
+export default class BannerCommand extends Command {
 	constructor() {
-		super("avatar", {
-			aliases: ["avatar", "ava", "av", "pfp", "pic"],
+		super("banner", {
+			aliases: ["banner", "ba"],
 			args: [
 				{
 					id: "user",
@@ -16,13 +16,13 @@ export default class AvatarCommand extends Command {
 		});
 	}
 
-	exec(msg: Message, args: { user: User }) {
+	async exec(msg: Message, args: { user: User }) {
 		this.client.createMessage(msg.channel.id, {
 			embed: new Embed(
 				{
-					title: `${args.user.username}'s Avatar`,
+					title: `${args.user.username}'s Banner`,
 					image: {
-						url: args.user.dynamicAvatarURL(undefined, 500),
+						url: "",
 					},
 				},
 				msg.author,

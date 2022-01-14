@@ -73,14 +73,28 @@ export default class CommandHandler extends Handler {
 
 		for (let i = 0; i < command.args.length; i++) {
 			const commandArg = command.args[i];
-			if (commandArg.required && !args[i]) {
-				this.emit(
-					Constants.commandHandler.events.missingArgument,
-					message,
-					command,
-					commandArg.id,
-				);
-				return;
+			if (!args[i]) {
+				if (!commandArg.default && commandArg.required) {
+					this.emit(
+						Constants.commandHandler.events.missingArgument,
+						message,
+						command,
+						commandArg.id,
+					);
+					return;
+				}
+
+				if (typeof commandArg.default == "function") {
+					const out = commandArg.default(message);
+					Object.defineProperty(parsedArgs, commandArg.id, {
+						value: out,
+					});
+				} else {
+					Object.defineProperty(parsedArgs, commandArg.id, {
+						value: commandArg.default,
+					});
+				}
+				continue;
 			}
 
 			switch (commandArg.type) {
