@@ -1,0 +1,89 @@
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Righteous&display=swap");
+@font-face {
+    font-family: "Hyperwave One";
+    src: url("hyperwave-one.ttf");
+}
+
+body {
+    background-color: rgb(20, 20, 20);
+    color: white;
+    font-family: "Open Sans", sans-serif;
+}
+
+a {
+    color: inherit;
+    transition: 0.3s;
+}
+a:hover {
+    color: red;
+    transition: 0.3s;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 97vh;
+}
+
+#information {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20vh;
+    flex: 1;
+}
+
+#title {
+    font-family: "Hyperwave One", sans-serif;
+    font-size: 14rem;
+    color: red;
+}
+
+footer {
+    align-self: center;
+}
+
+footer div {
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    flex: none;
+}
+
+#chaker {
+    line-height: 23px;
+    margin-right: 5px;
+    font-family: "Righteous", cursive;
+    background: linear-gradient(
+        45deg,
+        #f17c58,
+        #e94584,
+        #24aadb,
+        #27dbb1,
+        #ffdc18,
+        #ff3706
+    );
+    background-size: 600% 100%;
+    animation: gradient 16s linear infinite;
+    animation-direction: alternate;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+#credit {
+    margin-left: 5px;
+}
