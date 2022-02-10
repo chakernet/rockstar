@@ -1,0 +1,21 @@
+stages:
+  - build
+
+ts-backend:
+  stage: build
+  image: node:16
+  rules:
+    - changes: [handler/, client/]
+  script:
+    - yarn --immutable
+    - yarn build
+
+gateway:
+    stage: build
+    image: golang:1.17
+    rules:
+        - changes: [gateway/]
+    before_script:
+        - cd gateway
+    script:
+        - go build .
