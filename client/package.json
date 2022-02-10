@@ -6,7 +6,6 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"start": "node .",
-		"build": "tsc",
 		"typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js"
 	},
 	"dependencies": {
