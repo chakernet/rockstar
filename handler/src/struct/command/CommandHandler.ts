@@ -5,7 +5,7 @@ import Constants from "../../constants";
 import shlex from "shlex";
 import { Message, TextChannel } from "eris";
 
-type prefixFunc = (message: Message) => string;
+type prefixFunc = (message: Message) => Promise<string> | string;
 
 export interface CommandHandlerOptions extends HandlerOptions {
 	owner?: string | string[];
@@ -48,7 +48,8 @@ export default class CommandHandler extends Handler {
 
 	private async getPrefix(message: Message): Promise<string> {
 		if (typeof this.prefix == "function") {
-			return await this.prefix(message);
+			const prefix = await this.prefix(message);
+			return prefix;
 		}
 
 		return this.prefix;

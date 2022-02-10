@@ -3,6 +3,9 @@
 	"private": true,
 	"version": "1.0.0",
 	"packageManager": "yarn@3.0.2",
+	"scripts": {
+		"watch": "tsc -b --watch"
+	},
 	"workspaces": [
 		"client",
 		"handler"

@@ -1,4 +1,4 @@
-import { AnyChannel, ClientOptions as ErisClientOptions } from "eris";
+import { AnyChannel, ClientOptions as ErisClientOptions, Message } from "eris";
 import path from "path";
 import {
 	CommandHandler,
@@ -8,6 +8,7 @@ import {
 import Listener from "./Listener";
 import Command from "./Command";
 import CacheManager from "./CacheManager";
+import DbGuild from "../entity/Guild";
 const Emojis = require("../../../data/emojis.json");
 
 export default class RockstarClient extends BaseClient {
@@ -27,7 +28,13 @@ export default class RockstarClient extends BaseClient {
 			{
 				client: this,
 				extensions: [".ts", ".js"],
-				prefix: ".",
+				prefix: async (message: Message) => {
+					const guild = await DbGuild.findOne(message.guildID);
+					if (!guild) {
+						return process.env.BOT_PREFIX || "r!";
+					}
+					return guild.prefix!;
+				},
 				classToHandle: Command,
 			},
 		);
