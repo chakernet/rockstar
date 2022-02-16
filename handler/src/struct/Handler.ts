@@ -53,7 +53,7 @@ export default class Handler extends EventEmitter {
 		category!.set(mod.id, mod);
 	}
 
-	private load(thing: string | Function): Module | null {
+	protected load(thing: string | Function): Module | null {
 		const isClass = typeof thing == "function";
 
 		if (!isClass && !this.extensions.has(path.extname(<string>thing)))
@@ -80,11 +80,14 @@ export default class Handler extends EventEmitter {
 		if (this.modules.has(mod.id))
 			throw new Error(`Module ${mod.id} Already Loaded`);
 
+		if (!isClass) {
+			mod.location = thing;
+		}
 		this.register(mod);
 		return mod;
 	}
 
-	private getFiles(dir: string, files_?: string[]) {
+	protected getFiles(dir: string, files_?: string[]) {
 		files_ = files_ || [];
 		var files = fs.readdirSync(dir);
 		for (var i in files) {
@@ -104,7 +107,11 @@ export default class Handler extends EventEmitter {
 		for (let file of files) {
 			file = path.resolve(file);
 
-			this.load(file);
+			try {
+				this.load(file);
+			} catch (err) {
+				console.log(err);
+			}
 		}
 
 		return this;

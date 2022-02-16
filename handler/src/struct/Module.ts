@@ -9,6 +9,7 @@ export interface ModuleOptions {
 export default class Module {
 	public id: string;
 	public categoryId: string;
+	public readonly location: string | undefined;
 
 	public client: Client;
 	public handler: Handler;
@@ -22,6 +23,7 @@ export default class Module {
 		this.client = undefined;
 		// @ts-expect-error
 		this.handler = undefined;
+		this.location = undefined;
 		this.category = undefined;
 	}
 }

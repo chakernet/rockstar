@@ -4,6 +4,7 @@ import Module from "../Module";
 import Constants from "../../constants";
 import shlex from "shlex";
 import { Message, TextChannel } from "eris";
+import path, { ParsedPath } from "path";
 
 type prefixFunc = (message: Message) => Promise<string> | string;
 
@@ -147,12 +148,55 @@ export default class CommandHandler extends Handler {
 	public findCommandByAlias(alias: string): Command | null {
 		return this.modules.find((v: Module) => {
 			const vc = v as Command;
-			if (vc.aliases.includes(alias.toLowerCase())) {
+			if (
+				vc.aliases.includes(alias.toLowerCase()) &&
+				!vc.id.includes("-")
+			) {
 				return true;
 			}
 
 			return false;
 		}) as Command;
+	}
+
+	public register(mod: Module) {
+		super.register(mod);
+
+		// check if it is a subcommand
+		// format: parentid-subcommandid
+		if (mod.id.includes("-")) {
+			const splitted = mod.id.split("-");
+			const i = splitted.length - 1;
+			const newSplit = mod.id.split("-");
+			newSplit.pop();
+			const id =
+				splitted.length > 2 ? newSplit.join("-") : splitted[i - 1];
+			let command = this.modules.get(id) as Command;
+			if (!command) {
+				// There is no parent command, try to load it.
+				let childPath: ParsedPath | string = path.parse(mod.location!);
+				childPath.base = childPath.base.replace(
+					splitted[i],
+					splitted[i - 1],
+				);
+				childPath.dir = childPath.dir.replace(`/${splitted[i]}`, "");
+				childPath.dir = childPath.dir.replace(`\\${splitted[i]}`, "");
+				childPath = path.format(childPath);
+				try {
+					command = this.load(childPath) as Command;
+				} catch (err) {
+					command = this.modules.get(id) as Command;
+				}
+				if (!command) {
+					return new Error(
+						`could not find parent ${splitted[i - 1]} for child ${
+							splitted[i]
+						}`,
+					);
+				}
+			}
+			command.children.set(splitted[i], mod as Command);
+		}
 	}
 
 	public async handle(message: Message) {
@@ -163,7 +207,7 @@ export default class CommandHandler extends Handler {
 
 		message.parsed = { prefix };
 
-		const parsed = this.runPreParser(message.content);
+		let parsed = this.runPreParser(message.content);
 
 		// gets the first element of the parsed, splits by prefix, and then gets the first element that has content (the alias)
 		const alias = parsed[0].split(prefix).find((v) => v);
@@ -171,10 +215,25 @@ export default class CommandHandler extends Handler {
 			return;
 		}
 		message.parsed.alias = alias;
-		const command = this.findCommandByAlias(alias);
+		let command = this.findCommandByAlias(alias);
 		if (!command) {
 			this.emit(Constants.commandHandler.events.invalidCommand, message);
 			return;
+		}
+
+		for (let i = 1; parsed.length > i; i++) {
+			const child: Command | undefined = command.children.find((c) =>
+				c.aliases.includes(parsed[i]),
+			);
+			console.log(parsed[i]);
+			console.log(child?.id);
+			if (child) {
+				message.parsed.alias = parsed[i];
+				parsed[i] = prefix + parsed[i];
+				command = child;
+			} else {
+				break;
+			}
 		}
 
 		if (!(await this.runInhibitors(message, command))) return;

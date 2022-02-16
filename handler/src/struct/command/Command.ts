@@ -1,5 +1,6 @@
 import Module, { ModuleOptions } from "../Module";
 import { Message } from "eris";
+import { Collection } from "@discordjs/collection";
 
 export type ArgType = "string" | "number" | "user";
 export interface Arg {
@@ -23,6 +24,8 @@ export interface CommandOptions extends ModuleOptions {
 export default abstract class Command extends Module {
 	public description: string;
 	public aliases: string[];
+	public parent: Command | undefined;
+	public children: Collection<string, Command>;
 	public args: Arg[];
 	public ownerOnly: boolean;
 	public nsfw: boolean;
@@ -47,6 +50,8 @@ export default abstract class Command extends Module {
 		});
 
 		this.description = description;
+		this.parent = undefined;
+		this.children = new Collection();
 		this.aliases = aliases;
 		this.args = args;
 		this.ownerOnly = ownerOnly;
