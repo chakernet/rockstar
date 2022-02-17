@@ -221,12 +221,10 @@ export default class CommandHandler extends Handler {
 			return;
 		}
 
-		for (let i = 1; parsed.length > i; i++) {
+		for (let i = 1; parsed.length > i; parsed.shift()) {
 			const child: Command | undefined = command.children.find((c) =>
 				c.aliases.includes(parsed[i]),
 			);
-			console.log(parsed[i]);
-			console.log(child?.id);
 			if (child) {
 				message.parsed.alias = parsed[i];
 				parsed[i] = prefix + parsed[i];
