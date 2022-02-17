@@ -27,7 +27,7 @@ async function start() {
 		logging: false,
 	});
 
-	const bot = new Client(`Bot ${process.env.BOT_TOKEN}`);
+	const bot = new Client(`Bot ${process.env.BOT_TOKEN}`, db);
 	console.log("hello");
 
 	const conn = await amqplib.connect(<string>process.env.AMQP_URI);

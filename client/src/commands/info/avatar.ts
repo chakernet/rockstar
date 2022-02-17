@@ -6,6 +6,7 @@ export default class AvatarCommand extends Command {
 	constructor() {
 		super("avatar", {
 			aliases: ["avatar", "ava", "av", "pfp", "pic"],
+			category: "Info",
 			args: [
 				{
 					id: "user",

@@ -6,6 +6,7 @@ export default class BannerCommand extends Command {
 	constructor() {
 		super("banner", {
 			aliases: ["banner", "ba"],
+			category: "Info",
 			args: [
 				{
 					id: "user",

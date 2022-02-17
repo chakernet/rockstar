@@ -6,6 +6,7 @@ export default class EvalCommand extends Command {
 	constructor() {
 		super("eval", {
 			aliases: ["eval"],
+			category: "Owner",
 			args: [
 				{
 					id: "code",

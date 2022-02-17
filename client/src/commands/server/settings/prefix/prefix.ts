@@ -6,12 +6,28 @@ export default class PrefixSettingsCommand extends Command {
 	constructor() {
 		super("settings-prefix", {
 			aliases: ["prefix"],
+			description: "View the current prefix",
+			category: "Server",
 		});
 	}
 
-	exec(msg: Message) {
-		this.client.createMessage(msg.channel.id, {
-			embed: new Embed({ description: "Prefix Menu" }, msg.author),
+	async exec(msg: Message) {
+		// get the prefix
+		const guild = await this.client.getOrCreateNewGuild(msg.guildID!);
+
+		this.reply(msg, {
+			embed: new Embed(
+				{
+					fields: [
+						{
+							name: "Prefix",
+							value: `\`${guild.prefix}\``,
+							inline: true,
+						},
+					],
+				},
+				msg.author,
+			),
 		});
 	}
 }

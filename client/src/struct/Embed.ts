@@ -54,6 +54,11 @@ export class BaseEmbed implements DefaultEmbed {
 export default class Embed extends BaseEmbed {
 	constructor(options: EmbedOptions, user: User, error?: boolean) {
 		options.color ??= error ? 16713728 : user.accentColor || undefined;
+		options.footer ??= {
+			text: `${user.username}#${user.discriminator}`,
+			icon_url: user.dynamicAvatarURL(),
+		};
+		options.timestamp ??= new Date();
 		super(options);
 	}
 }

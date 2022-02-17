@@ -6,6 +6,8 @@ export default class SettingsCommand extends Command {
 	constructor() {
 		super("settings", {
 			aliases: ["settings"],
+			description: "View the settings for your server",
+			category: "Server",
 		});
 	}
 
