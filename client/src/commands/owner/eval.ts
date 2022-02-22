@@ -60,13 +60,19 @@ export default class EvalCommand extends Command {
 			const evaled = eval(msg.parsed!.content!);
 
 			const cleaned = await clean(evaled);
-			this.client.addMessageReaction(msg.channel.id, msg.id, "✅");
+			this.client.addMessageReaction(
+				msg.channel.id,
+				msg.id,
+				this.client.emojis.check,
+			);
 			this.client.createMessage(msg.channel.id, {
 				embed: new Embed(
 					{
 						title: "Eval Results",
 						description: [
-							`🕓 **Elapsed: \`${elapsedTime()}\`**`,
+							`${
+								this.client.emojis.clock
+							} **Elapsed: \`${elapsedTime()}\`**`,
 							"```js",
 							cleaned,
 							"```",
@@ -82,13 +88,19 @@ export default class EvalCommand extends Command {
 				},
 			});
 		} catch (err) {
-			this.client.addMessageReaction(msg.channel.id, msg.id, "❌");
+			this.client.addMessageReaction(
+				msg.channel.id,
+				msg.id,
+				this.client.emojis.x,
+			);
 			this.client.createMessage(msg.channel.id, {
 				embed: new Embed(
 					{
 						title: "Eval Error",
 						description: [
-							`🕓 **Elapsed: \`${elapsedTime()}\`**`,
+							`${
+								this.client.emojis.clock
+							} **Elapsed: \`${elapsedTime()}\`**`,
 							"```js",
 							err,
 							"```",
