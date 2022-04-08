@@ -3,14 +3,9 @@ A WIP Discord Bot that puts Speed & Reliability first.
 
 ---
 
-### Table of Contents
-[[_TOC_]]
-
 ## Structure
-Rockstar is organized like a monorepo, so everything is divided into it's own subproject.
+Rockstar is a monorepo, so everything is divided into it's own subproject.
 
-
-#### Chart
 | Directory | Purpose |
 | ---       | ---     |
 | `gateway` | Recieving Discord Events and putting them through RabbitMQ to be fed to Clients |
